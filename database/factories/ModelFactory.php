@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -20,5 +22,16 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
+    ];
+});
+
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Clock::class, function (Faker\Generator $faker) {
+    static $password;
+
+    return [
+        'user_id' => factory(App\User::class)->create()->id,
+        'in_at' => Carbon::parse('8 hours ago'),
+        'out_at' => Carbon::now(),
     ];
 });
