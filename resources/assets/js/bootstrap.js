@@ -7,11 +7,10 @@
 
 try {
     window.$ = window.jQuery = require('jquery');
-
     require('bootstrap-sass');
-    
-    require('underscore');
 
+    window.Handlebars = require('handlebars/dist/handlebars.min.js');
+    
     // setup csrf-token to be set with ajax requests automatically.
     $.ajaxSetup({
         headers: {

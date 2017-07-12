@@ -7,20 +7,36 @@
 
 require('./bootstrap');
 
-$("a[href='#punch']").click(function (e){
+$(function() {
+    refreshPunchHistory();
+});
+
+$("a[href='#punch']").click(function (e) {
     e.preventDefault();
 
     $(this).trigger('punch');
 });
 
-$("a[href='#punch']").on('punch', function() {
-    punch();
-    refreshPunchHistory();
+
+$(document).on("click", "[id$='_button']", function(e){
+    e.preventDefault();
+
+    var parentId = $(this).parent().parent().attr('id');
+
+    $(`.${parentId}_punch`).toggleClass('hide');
+    $(this).text(
+        $(this).text() === 'hide' ? 'show' : 'hide'
+    );
 });
+
+
+$("a[href='#punch']").on('punch', punch);
 
 function punch() {
     $.post('/clock/punch', function() {
         toggleTimeClockButton();
+
+        refreshPunchHistory();
     });
 }
 
@@ -35,5 +51,17 @@ function toggleTimeClockButton()
 
 function refreshPunchHistory()
 {
-    // 
+    $.post('/clock/report', function(data) {
+        loadTemplate('content', 'timesheets-template', {data: data});
+    })
 }
+
+function loadTemplate(id, template, data)
+{
+    var source   = $("#" + template).html();
+    var template = Handlebars.compile(source);
+    var html    = template(data);
+
+    $('#' + id).html(html);
+}
+

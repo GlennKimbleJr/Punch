@@ -8372,3 +8372,7 @@ button.close {
   font-weight: bold;
 }
 
+.hide {
+  display: none;
+}
+

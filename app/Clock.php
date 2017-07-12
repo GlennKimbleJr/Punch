@@ -34,7 +34,7 @@ class Clock extends Model
      * 
      * @var array
      */
-    protected $appends = ['total'];
+    protected $appends = ['total', 'in_time', 'out_time'];
 
     /**
      * Return if the authenticated user is clocked in.
@@ -138,7 +138,33 @@ class Clock extends Model
      */
     public function getTotalAttribute()
     {
-        return $this->out_at->diffInHours($this->in_at);
+        if (NULL === $this->out_at) return '0.00';
+        
+        return number_format(
+            (($this->out_at->diffInSeconds($this->in_at) / 60 ) / 60)
+            , 2);
+    }
+
+    /**
+     * Formats in_at to just the hours and seconds.
+     * 
+     * @return string
+     */
+    public function getInTimeAttribute()
+    {
+        return $this->in_at->format('h:i A');
+    }
+
+    /**
+     * Formats out_at to just the hours and seconds.
+     * 
+     * @return string
+     */
+    public function getOutTimeAttribute()
+    {
+        if (NULL === $this->out_at) return NULL;
+
+        return $this->out_at->format('h:i A');
     }
 
     /**

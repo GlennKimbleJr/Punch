@@ -4,6 +4,7 @@ namespace App\Reports;
 
 use App\User;
 use App\Clock;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TimeSheetReport
@@ -56,17 +57,26 @@ class TimeSheetReport
 
         $data->each(function ($record) use (&$array) {
             $key = $record->in_at->format('Y-m-d');
+            $day_of_week = Carbon::parse($key)->format('l');
 
             if (! isset($array['timesheets'][$key])) {
                 $array['timesheets'][$key] = [
+                    'day_of_week' => $day_of_week,
                     'punches' => [],
-                    'total' => 0
+                    'total' => 0,
+                    'button' => (date('Y-m-d') == $record->in_at->format('Y-m-d')) ? 'hide' : 'show'
                 ];
             }
 
-            $array['timesheets'][$key]['punches'][] = $record;
-            $array['timesheets'][$key]['total'] += $record->total;
             $array['total'] += $record->total;
+            $array['timesheets'][$key]['total'] += $record->total;
+            $array['timesheets'][$key]['punches'][] = [
+                'day_of_week' => $day_of_week,
+                'in_time' => $record->in_time,
+                'out_time' => $record->out_time,
+                'total' => $record->total,
+                'class' => (date('Y-m-d') == $record->in_at->format('Y-m-d')) ? '' : 'hide'
+            ];
         });
 
         return $array;
