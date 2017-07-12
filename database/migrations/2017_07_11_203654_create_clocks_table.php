@@ -16,8 +16,8 @@ class CreateClocksTable extends Migration
         Schema::create('clocks', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->timestamp('in_at');
-            $table->timestamp('out_at')->nullable();
+            $table->datetime('in_at');
+            $table->datetime('out_at')->nullable();
         });
     }
 
