@@ -36,7 +36,15 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        @if (Auth::check() && $status)
+                        <li id="status" class="punched-in">
+                            <a href="#punch">Clock Out</a>
+                        </li>
+                        @elseif (Auth::check() && ! $status)
+                        <li id="status" class="punched-out">
+                            <a href="#punch">Clock In</a>
+                        </li>
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -47,6 +55,7 @@
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @else
                             <li class="dropdown">
+                                
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>

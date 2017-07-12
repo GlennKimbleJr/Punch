@@ -84,6 +84,33 @@ module.exports = __webpack_require__(6);
 
 __webpack_require__(2);
 
+$("a[href='#punch']").click(function (e) {
+    e.preventDefault();
+
+    $(this).trigger('punch');
+});
+
+$("a[href='#punch']").on('punch', function () {
+    punch();
+    refreshPunchHistory();
+});
+
+function punch() {
+    $.post('/clock/punch', function () {
+        toggleTimeClockButton();
+    });
+}
+
+function toggleTimeClockButton() {
+    $('#status').toggleClass('punched-in punched-out');
+
+    $('#status a').text($('#status a').text() === 'Clock In' ? 'Clock Out' : 'Clock In');
+}
+
+function refreshPunchHistory() {
+    // 
+}
+
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -101,21 +128,14 @@ try {
     __webpack_require__(4);
 
     __webpack_require__(5);
+
+    // setup csrf-token to be set with ajax requests automatically.
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 } catch (e) {}
-
-/**
- * Next we will register the CSRF Token as a common header with Axios so that
- * all outgoing HTTP requests automatically have it attached. This is just
- * a simple convenience so we don't have to attach every token manually.
- */
-
-var token = document.head.querySelector('meta[name="csrf-token"]');
-
-if (token) {
-    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-} else {
-    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-}
 
 /***/ }),
 /* 3 */

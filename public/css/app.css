@@ -8350,3 +8350,25 @@ button.close {
   }
 }
 
+#status {
+  margin: 1px !important;
+}
+
+.punched-out {
+  background-color: #ffa3a3;
+}
+
+.punched-out a {
+  color: #a51313 !important;
+  font-weight: bold;
+}
+
+.punched-in {
+  background-color: #aff2b7;
+}
+
+.punched-in a {
+  color: #13a524 !important;
+  font-weight: bold;
+}
+

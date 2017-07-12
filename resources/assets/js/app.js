@@ -6,3 +6,34 @@
  */
 
 require('./bootstrap');
+
+$("a[href='#punch']").click(function (e){
+    e.preventDefault();
+
+    $(this).trigger('punch');
+});
+
+$("a[href='#punch']").on('punch', function() {
+    punch();
+    refreshPunchHistory();
+});
+
+function punch() {
+    $.post('/clock/punch', function() {
+        toggleTimeClockButton();
+    });
+}
+
+function toggleTimeClockButton()
+{
+    $('#status').toggleClass('punched-in punched-out');
+
+    $('#status a').text(
+        $('#status a').text() === 'Clock In' ? 'Clock Out' : 'Clock In'
+    );
+}
+
+function refreshPunchHistory()
+{
+    // 
+}
