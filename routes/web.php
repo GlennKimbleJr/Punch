@@ -20,3 +20,5 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('/clock/punch', 'TimeClockController@store');
+Route::post('/clock/report', 'TimeClockController@index');
+
