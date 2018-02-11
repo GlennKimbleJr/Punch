@@ -28,7 +28,7 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function punch()
+    public function punches()
     {
         return $this->hasMany(Punch::class);
     }
@@ -40,7 +40,7 @@ class User extends Authenticatable
 
     public function isPunchedIn()
     {
-        if (!$this->punch->count()) {
+        if ($this->punches->isEmpty()) {
             return false;
         }
 
