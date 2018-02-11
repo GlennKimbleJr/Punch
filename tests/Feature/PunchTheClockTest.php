@@ -32,7 +32,7 @@ class PunchTheClockTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user, 'api')->postJson(route('punch-in'));
+        $response = $this->apiUser($user)->postJson(route('punch-in'));
 
         $response->assertStatus(200);
         $this->assertCount(1, Punch::all());
@@ -44,7 +44,7 @@ class PunchTheClockTest extends TestCase
         $user = factory(User::class)->create();
         $user->punch();
 
-        $response = $this->actingAs($user->fresh(), 'api')->post(route('punch-out'));
+        $response = $this->apiUser($user->fresh())->post(route('punch-out'));
 
         $response->assertStatus(200);
         $this->assertFalse($user->fresh()->isPunchedIn());
@@ -57,7 +57,7 @@ class PunchTheClockTest extends TestCase
 
         $this->assertFalse($user->isPunchedIn());
 
-        $response = $this->actingAs($user, 'api')->post(route('punch-out'));
+        $response = $this->apiUser($user)->post(route('punch-out'));
 
         $response->assertSessionHasErrors('invalid-punch');
     }
@@ -71,7 +71,7 @@ class PunchTheClockTest extends TestCase
 
         $this->assertTrue($user->isPunchedIn());
 
-        $response = $this->actingAs($user, 'api')->post(route('punch-in'));
+        $response = $this->apiUser($user)->post(route('punch-in'));
 
         $response->assertSessionHasErrors('invalid-punch');
     }
