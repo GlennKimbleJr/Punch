@@ -59,7 +59,7 @@ class PunchTheClockTest extends TestCase
 
         $response = $this->apiUser($user)->post(route('punch-out'));
 
-        $response->assertSessionHasErrors('invalid-punch');
+        $response->assertStatus(403);
     }
 
     /** @test */
@@ -73,6 +73,6 @@ class PunchTheClockTest extends TestCase
 
         $response = $this->apiUser($user)->post(route('punch-in'));
 
-        $response->assertSessionHasErrors('invalid-punch');
+        $response->assertStatus(403);
     }
 }
