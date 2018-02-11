@@ -4,8 +4,8 @@ namespace Tests\Unit;
 
 use App\User;
 use App\Punch;
-use Carbon\Carbon;
 use Tests\TestCase;
+use Illuminate\Support\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserTest extends TestCase
@@ -43,11 +43,9 @@ class UserTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $user->punches()->create([
-            'in_at' => now(),
-        ]);
+        $user->punch();
 
-        $this->assertTrue($user->isPunchedIn());
+        $this->assertTrue($user->fresh()->isPunchedIn());
     }
 
     /** @test */
@@ -55,11 +53,30 @@ class UserTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $user->punches()->create([
-            'in_at' => now(),
-            'out_at' => now(),
-        ]);
+        $user->punch();
+        $user->fresh()->punch();
 
-        $this->assertFalse($user->isPunchedIn());
+        $this->assertFalse($user->fresh()->isPunchedIn());
+    }
+
+    /** @test */
+    public function punch_will_punch_a_user_in_if_they_are_punched_out()
+    {
+        $user = factory(User::class)->create();
+
+        $user->punch();
+
+        $this->assertTrue($user->fresh()->isPunchedIn());
+    }
+
+    /** @test */
+    public function punch_will_punch_a_user_out_if_they_are_punched_in()
+    {
+        $user = factory(User::class)->create();
+        $user->punch();
+
+        $user->fresh()->punch();
+
+        $this->assertFalse($user->fresh()->isPunchedIn());
     }
 }

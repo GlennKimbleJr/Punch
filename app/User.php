@@ -38,6 +38,11 @@ class User extends Authenticatable
         return $this->hasOne(Punch::class)->orderByDesc('updated_at');
     }
 
+    public function punch()
+    {
+        return $this->isPunchedIn() ? $this->punchOut() : $this->punchIn();
+    }
+
     public function isPunchedIn()
     {
         if ($this->punches->isEmpty()) {
@@ -45,5 +50,19 @@ class User extends Authenticatable
         }
 
         return $this->mostRecentPunch->isPunchedIn();
+    }
+
+    private function punchIn()
+    {
+        return $this->punches()->create([
+            'in_at' => now(),
+        ]);
+    }
+
+    private function punchOut()
+    {
+        return $this->mostRecentPunch()->update([
+            'out_at' => now(),
+        ]);
     }
 }

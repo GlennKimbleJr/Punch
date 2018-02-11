@@ -42,14 +42,12 @@ class PunchTheClockTest extends TestCase
     public function an_employee_can_punch_out()
     {
         $user = factory(User::class)->create();
-        $user->punches()->create([
-            'in_at' => now(),
-        ]);
+        $user->punch();
 
-        $response = $this->actingAs($user)->post(route('punch-out'));
+        $response = $this->actingAs($user->fresh())->post(route('punch-out'));
 
         $response->assertStatus(200);
-        $this->assertFalse($user->isPunchedIn());
+        $this->assertFalse($user->fresh()->isPunchedIn());
     }
 
     /** @test */
@@ -68,9 +66,8 @@ class PunchTheClockTest extends TestCase
     public function an_employee_cannot_punch_in_if_they_are_already_punched_in()
     {
         $user = factory(User::class)->create();
-        $user->punches()->create([
-            'in_at' => now(),
-        ]);
+        $user->punch();
+        $user = $user->fresh();
 
         $this->assertTrue($user->isPunchedIn());
 
