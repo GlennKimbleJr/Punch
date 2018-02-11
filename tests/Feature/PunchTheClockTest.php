@@ -14,25 +14,25 @@ class PunchTheClockTest extends TestCase
     /** @test */
     public function a_guest_cannot_punch_in()
     {
-        $response = $this->post(route('punch-in'));
+        $response = $this->postJson(route('punch-in'));
 
-        $response->assertRedirect('login');
+        $response->assertStatus(401);
     }
 
     /** @test */
     public function a_guest_cannot_punch_out()
     {
-        $response = $this->post(route('punch-out'));
+        $response = $this->postJson(route('punch-out'));
 
-        $response->assertRedirect('login');
+        $response->assertStatus(401);
     }
 
     /** @test */
     public function an_employee_can_punch_in()
     {
-        $this->actingAs(factory(User::class)->create());
+        $user = factory(User::class)->create();
 
-        $response = $this->post(route('punch-in'));
+        $response = $this->actingAs($user, 'api')->postJson(route('punch-in'));
 
         $response->assertStatus(200);
         $this->assertCount(1, Punch::all());
@@ -44,7 +44,7 @@ class PunchTheClockTest extends TestCase
         $user = factory(User::class)->create();
         $user->punch();
 
-        $response = $this->actingAs($user->fresh())->post(route('punch-out'));
+        $response = $this->actingAs($user->fresh(), 'api')->post(route('punch-out'));
 
         $response->assertStatus(200);
         $this->assertFalse($user->fresh()->isPunchedIn());
@@ -57,7 +57,7 @@ class PunchTheClockTest extends TestCase
 
         $this->assertFalse($user->isPunchedIn());
 
-        $response = $this->actingAs($user)->post(route('punch-out'));
+        $response = $this->actingAs($user, 'api')->post(route('punch-out'));
 
         $response->assertSessionHasErrors('invalid-punch');
     }
@@ -71,7 +71,7 @@ class PunchTheClockTest extends TestCase
 
         $this->assertTrue($user->isPunchedIn());
 
-        $response = $this->actingAs($user)->post(route('punch-in'));
+        $response = $this->actingAs($user, 'api')->post(route('punch-in'));
 
         $response->assertSessionHasErrors('invalid-punch');
     }
