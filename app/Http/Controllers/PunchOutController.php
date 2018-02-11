@@ -43,9 +43,7 @@ class PunchOutController extends Controller
             ]);
         }
 
-        Auth::user()->mostRecentPunch->update([
-            'out_at' => now(),
-        ]);
+        Auth::user()->punch();
     }
 
     /**
