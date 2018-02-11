@@ -18,8 +18,3 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('home', 'HomeController@index')->name('home');
-
-Route::middleware('auth')->group(function () {
-    Route::post('punch-in', 'PunchInController@store')->name('punch-in');
-    Route::post('punch-out', 'PunchOutController@store')->name('punch-out');
-});
