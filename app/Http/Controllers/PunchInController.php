@@ -43,7 +43,7 @@ class PunchInController extends Controller
             ]);
         }
 
-        Auth::user()->punch()->create([
+        Auth::user()->punches()->create([
             'in_at' => now(),
         ]);
     }

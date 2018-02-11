@@ -17,7 +17,7 @@ class UserTest extends TestCase
     {
         $this->assertCount(0, Punch::get());
 
-        factory(User::class)->create()->punch()->create();
+        factory(User::class)->create()->punches()->create();
 
         $this->assertCount(1, Punch::get());
     }
@@ -27,11 +27,11 @@ class UserTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $olderPunch = $user->punch()->create([
+        $olderPunch = $user->punches()->create([
             'updated_at' => Carbon::parse('Last Tuesday'),
         ]);
 
-        $newerPunch = $user->punch()->create([
+        $newerPunch = $user->punches()->create([
             'updated_at' => now(),
         ]);
 
@@ -44,7 +44,7 @@ class UserTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $this->assertEquals(0, $user->punch->count());
+        $this->assertEquals(0, $user->punches->count());
         $this->assertFalse($user->isPunchedIn());
     }
 
@@ -53,7 +53,7 @@ class UserTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $user->punch()->create([
+        $user->punches()->create([
             'in_at' => now(),
         ]);
 
@@ -65,7 +65,7 @@ class UserTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $user->punch()->create([
+        $user->punches()->create([
             'in_at' => now(),
             'out_at' => now(),
         ]);
