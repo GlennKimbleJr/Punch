@@ -12,14 +12,6 @@ class PunchTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_punch_belongs_to_a_user()
-    {
-        $punch = factory(Punch::class)->create();
-
-        $this->assertInstanceOf(User::class, $punch->user);
-    }
-
-    /** @test */
     public function is_punched_in_returns_true_if_there_is_a_in_at_time_but_not_a_out_at_time()
     {
         $punch = factory(Punch::class)->create([

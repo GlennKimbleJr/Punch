@@ -13,16 +13,6 @@ class UserTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_user_has_many_punches()
-    {
-        $this->assertCount(0, Punch::get());
-
-        factory(User::class)->create()->punches()->create();
-
-        $this->assertCount(1, Punch::get());
-    }
-
-    /** @test */
     public function most_recent_punch_returns_the_single_record_with_the_most_recent_updated_at_timestamp()
     {
         $user = factory(User::class)->create();
