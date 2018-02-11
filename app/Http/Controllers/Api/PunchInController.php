@@ -10,11 +10,15 @@ class PunchInController extends Controller
     public function store()
     {
         if (Auth::user()->isPunchedIn()) {
-            return redirect()->back()->withErrors([
-                'invalid-punch' => 'You are already punched in.',
-            ]);
+            return response()->json([
+                'message' => 'You are already punched in.',
+            ], 403);
         }
 
         Auth::user()->punch();
+
+        return response()->json([
+            'message' => 'You have been successfully punched in.',
+        ], 200);
     }
 }
