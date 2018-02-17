@@ -44,7 +44,7 @@ class PunchTheClockTest extends TestCase
         $user = factory(User::class)->create();
         $user->punch();
 
-        $response = $this->apiUser($user->fresh())->post(route('punch-out'));
+        $response = $this->apiUser($user->fresh())->postJson(route('punch-out'));
 
         $response->assertStatus(200);
         $this->assertFalse($user->fresh()->isPunchedIn());
@@ -57,7 +57,7 @@ class PunchTheClockTest extends TestCase
 
         $this->assertFalse($user->isPunchedIn());
 
-        $response = $this->apiUser($user)->post(route('punch-out'));
+        $response = $this->apiUser($user)->postJson(route('punch-out'));
 
         $response->assertStatus(403);
     }
@@ -71,7 +71,7 @@ class PunchTheClockTest extends TestCase
 
         $this->assertTrue($user->isPunchedIn());
 
-        $response = $this->apiUser($user)->post(route('punch-in'));
+        $response = $this->apiUser($user)->postJson(route('punch-in'));
 
         $response->assertStatus(403);
     }
